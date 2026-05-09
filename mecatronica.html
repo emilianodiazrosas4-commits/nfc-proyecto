@@ -71,11 +71,18 @@ Entrar
 function registrar(){
 
     fetch(
-    "https://script.google.com/macros/s/AKfycbx-0HOAk0G-VGYaw0-0wx-h21ITdED4C-foQLjkBbJ6KHCdw06XmAMuujob_2Jc5n1A/exec?carrera=Mecatronica"
-    );
+    "https://script.google.com/macros/s/AKfycbyxFHUVZ2FBguLKxzaYQQzacPr0jcldcH8BUqFKeHA17dkcF7nVHPoTrFXMeSRGfosJ/exec?carrera=Mecatronica"
+    )
+    .then(() => {
 
-    window.location.href =
-    "https://docs.google.com/document/d/1LciRrmcx7WLuJpBzcfqvp-U1U2u7tkLZ/preview";
+        setTimeout(() => {
+
+            window.location.href =
+            "https://docs.google.com/document/d/1LciRrmcx7WLuJpBzcfqvp-U1U2u7tkLZ/preview";
+
+        }, 500);
+
+    });
 }
 
 </script>
