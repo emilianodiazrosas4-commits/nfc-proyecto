@@ -1,113 +1,117 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Dashboard NFC</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body {
-  font-family: Arial;
-  text-align: center;
-  background: #f5f5f5;
+
+body{
+    font-family:Arial;
+    background:#f5f5f5;
+    text-align:center;
+    padding:20px;
 }
 
-canvas {
-  max-width: 90%;
+.container{
+    background:white;
+    max-width:700px;
+    margin:auto;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0px 0px 10px rgba(0,0,0,0.2);
 }
 
-h2 {
-  margin-top: 20px;
+canvas{
+    margin-top:30px;
 }
 
-#top {
-  font-size: 20px;
-  margin: 15px;
-}
 </style>
-
 </head>
 
 <body>
 
-<h2>📊 Interés por Carrera</h2>
+<div class="container">
 
-<div id="top">Cargando...</div>
+<h1>📊 Dashboard NFC</h1>
+
+<h2 id="ganador"></h2>
 
 <canvas id="grafica"></canvas>
 
+</div>
+
 <script>
+
+const url =
+"https://script.google.com/macros/s/AKfycbzXi9kiaBd5VkRv16FCFpJapFtpzmhNu7Bfn0TRFkYxo7mwfC-hxDvPLlkUc8waVas/exec";
 
 let chart;
 
-const url = "https://script.google.com/macros/s/AKfycbwOlIdFPBmbbA9fW2uL0rizSokwT_JPEWEQx105jAMGr9Fuvgwb66gDOkMAB56PrTse/exec";
+async function cargarDatos(){
 
-// Obtener datos
-async function obtenerDatos() {
-  const response = await fetch(url);
-  return await response.json();
-}
+    const response = await fetch(url);
+    const data = await response.json();
 
-// Crear gráfica
-function crearGrafica(datos) {
-  const ctx = document.getElementById('grafica').getContext('2d');
+    const valores = [
+        data.electrica,
+        data.electronica,
+        data.mecatronica
+    ];
 
-  chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Eléctrica', 'Electrónica', 'Mecatrónica'],
-      datasets: [{
-        label: 'Visitas',
-        data: [
-          datos.electrica,
-          datos.electronica,
-          datos.mecatronica
-        ]
-      }]
+    const carreras = [
+        "Eléctrica",
+        "Electrónica",
+        "Mecatrónica"
+    ];
+
+    let max = Math.max(...valores);
+    let indice = valores.indexOf(max);
+
+    document.getElementById("ganador").innerHTML =
+        "Carrera con mayor interés: " + carreras[indice];
+
+    if(chart){
+        chart.destroy();
     }
-  });
+
+    const ctx = document
+        .getElementById("grafica")
+        .getContext("2d");
+
+    chart = new Chart(ctx, {
+
+        type: "bar",
+
+        data: {
+
+            labels: carreras,
+
+            datasets: [{
+                label: "Visitas",
+                data: valores,
+                borderWidth: 1
+            }]
+        },
+
+        options: {
+            responsive:true,
+            scales:{
+                y:{
+                    beginAtZero:true
+                }
+            }
+        }
+    });
 }
 
-// Actualizar gráfica
-function actualizarGrafica(datos) {
-  chart.data.datasets[0].data = [
-    datos.electrica,
-    datos.electronica,
-    datos.mecatronica
-  ];
-  chart.update();
-}
+cargarDatos();
 
-// Mostrar la carrera más popular
-function mostrarTop(datos) {
-  let max = Math.max(datos.electrica, datos.electronica, datos.mecatronica);
-
-  let top = "Empate";
-
-  if (max === datos.electrica) top = "⚡ Eléctrica";
-  if (max === datos.electronica) top = "🔌 Electrónica";
-  if (max === datos.mecatronica) top = "🤖 Mecatrónica";
-
-  document.getElementById("top").innerText = "Carrera más popular: " + top;
-}
-
-// 🔄 LOOP AUTOMÁTICO
-async function iniciar() {
-  const datos = await obtenerDatos();
-
-  crearGrafica(datos);
-  mostrarTop(datos);
-
-  // Actualiza cada 5 segundos
-  setInterval(async () => {
-    const nuevosDatos = await obtenerDatos();
-    actualizarGrafica(nuevosDatos);
-    mostrarTop(nuevosDatos);
-  }, 5000);
-}
-
-iniciar();
+setInterval(cargarDatos, 5000);
 
 </script>
 
