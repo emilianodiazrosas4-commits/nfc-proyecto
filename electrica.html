@@ -71,18 +71,18 @@ Entrar
 function registrar(){
 
     fetch(
-    "https://script.google.com/macros/s/AKfycbyxFHUVZ2FBguLKxzaYQQzacPr0jcldcH8BUqFKeHA17dkcF7nVHPoTrFXMeSRGfosJ/exec?carrera=Electrica"
-    )
-    .then(() => {
-
-        setTimeout(() => {
-
-            window.location.href =
-            "https://docs.google.com/document/d/1DIKeP_MJnB3cCTX5xHPLsBs6UaWbkB2x/preview";
-
-        }, 500);
-
+    "https://script.google.com/macros/s/AKfycbxjcwobk-esNaBGn6kz-T4Jd0OFWOsjHntAWqOH2wY_kQSm4tfBYuJnoRbUXJd_IMby/exec?carrera=Electrica",
+    {
+        method: "GET",
+        mode: "no-cors"
     });
+
+    setTimeout(() => {
+
+        window.location.href =
+        "https://docs.google.com/document/d/1DIKeP_MJnB3cCTX5xHPLsBs6UaWbkB2x/preview";
+
+    }, 1000);
 }
 
 </script>
