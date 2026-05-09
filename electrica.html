@@ -60,11 +60,25 @@ Estás a punto de ingresar a la oferta académica de Ingeniería Eléctrica.
 Presiona el botón para continuar.
 </p>
 
-<a href="https://script.google.com/macros/s/AKfycbyOzrNT8czcd6vLhc-jO7_wo7xVJ1b7lI8t-nyLzb4hBczpcKWoLkJQH26cBMc4D8Q7/exec?carrera=Electrica">
+<a href="#" onclick="registrar()">
 Entrar
 </a>
 
 </div>
+
+<script>
+
+function registrar(){
+
+    fetch(
+    "https://script.google.com/macros/s/AKfycbx-0HOAk0G-VGYaw0-0wx-h21ITdED4C-foQLjkBbJ6KHCdw06XmAMuujob_2Jc5n1A/exec?carrera=Electrica"
+    );
+
+    window.location.href =
+    "https://docs.google.com/document/d/1DIKeP_MJnB3cCTX5xHPLsBs6UaWbkB2x/edit";
+}
+
+</script>
 
 </body>
 </html>
