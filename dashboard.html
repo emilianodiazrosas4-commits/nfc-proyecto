@@ -1,47 +1,161 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
+
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dashboard NFC</title>
+<title>Dashboard de Interés Académico</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 
 body{
-    font-family:Arial;
-    background:#f5f5f5;
-    text-align:center;
+    margin:0;
+    padding:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f0f2f5;
+}
+
+.header{
+    background:#0b1f3a;
+    color:white;
     padding:20px;
+    text-align:center;
+    box-shadow:0px 2px 8px rgba(0,0,0,0.2);
+}
+
+.logo{
+    width:120px;
+    margin-bottom:10px;
 }
 
 .container{
-    background:white;
-    max-width:700px;
-    margin:auto;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0px 0px 10px rgba(0,0,0,0.2);
+    width:90%;
+    max-width:1100px;
+    margin:30px auto;
 }
 
-canvas{
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0px 2px 10px rgba(0,0,0,0.1);
+    text-align:center;
+}
+
+.card h2{
+    margin:0;
+    color:#0b1f3a;
+    font-size:20px;
+}
+
+.numero{
+    margin-top:15px;
+    font-size:40px;
+    font-weight:bold;
+    color:#007bff;
+}
+
+.chart-container{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0px 2px 10px rgba(0,0,0,0.1);
+}
+
+.footer{
+    text-align:center;
     margin-top:30px;
+    color:#777;
+    font-size:14px;
 }
 
 </style>
+
 </head>
 
 <body>
 
+<div class="header">
+
+<!-- CAMBIA logo.png POR TU LOGO -->
+<img src="logo.png" class="logo">
+
+<h1>Dashboard de Interés Académico</h1>
+
+<p>
+Monitoreo en tiempo real de accesos mediante NFC
+</p>
+
+</div>
+
 <div class="container">
 
-<h1>📊 Dashboard NFC</h1>
+<div class="cards">
 
-<h2 id="ganador"></h2>
+<div class="card">
+
+<h2>Ingeniería Eléctrica</h2>
+
+<div class="numero" id="electrica">
+0
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Ingeniería Electrónica</h2>
+
+<div class="numero" id="electronica">
+0
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Ingeniería Mecatrónica</h2>
+
+<div class="numero" id="mecatronica">
+0
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Carrera con Mayor Interés</h2>
+
+<div class="numero" id="ganador" style="font-size:28px;">
+-
+</div>
+
+</div>
+
+</div>
+
+<div class="chart-container">
 
 <canvas id="grafica"></canvas>
+
+</div>
+
+<div class="footer">
+
+Sistema de monitoreo NFC para ofertas académicas
+
+</div>
 
 </div>
 
@@ -55,7 +169,18 @@ let chart;
 async function cargarDatos(){
 
     const response = await fetch(url);
+
     const data = await response.json();
+
+    document.getElementById("electrica").innerHTML =
+    data.electrica;
+
+    document.getElementById("electronica").innerHTML =
+    data.electronica;
+
+    document.getElementById("mecatronica").innerHTML =
+    data.mecatronica;
+
 
     const valores = [
         data.electrica,
@@ -69,19 +194,22 @@ async function cargarDatos(){
         "Mecatrónica"
     ];
 
+
     let max = Math.max(...valores);
+
     let indice = valores.indexOf(max);
 
     document.getElementById("ganador").innerHTML =
-        "Carrera con mayor interés: " + carreras[indice];
+    carreras[indice];
+
 
     if(chart){
         chart.destroy();
     }
 
-    const ctx = document
-        .getElementById("grafica")
-        .getContext("2d");
+    const ctx =
+    document.getElementById("grafica").getContext("2d");
+
 
     chart = new Chart(ctx, {
 
@@ -92,15 +220,29 @@ async function cargarDatos(){
             labels: carreras,
 
             datasets: [{
-                label: "Visitas",
+
+                label: "Número de accesos",
+
                 data: valores,
-                borderWidth: 1
+
+                borderWidth:1
+
             }]
         },
 
         options: {
+
             responsive:true,
+
+            plugins:{
+
+                legend:{
+                    display:true
+                }
+            },
+
             scales:{
+
                 y:{
                     beginAtZero:true
                 }
